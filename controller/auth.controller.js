@@ -1,11 +1,12 @@
 var db = require('../db');
-var md5 = require('md5-nodejs');
+// var md5 = require('md5-nodejs');
 
 module.exports.getlogin = (req, res) => {
     res.render('auth/login');
 };
 
 module.exports.postLogin = (req, res) => {
+    const bcrypt = require('../custom-bcrypt');
     var email = req.body.email;
     var password = req.body.password;
 
@@ -21,9 +22,9 @@ module.exports.postLogin = (req, res) => {
         return;
     }
 
-    var hashpassword = md5(password);
+    // var hashpassword = md5(password);
 
-    if (user.password !== hashpassword) {
+    if (!bcrypt.compare(password, user.password)) {
         res.render('auth/login', {
             errors: [
                 'Wrong password'

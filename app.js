@@ -7,8 +7,8 @@ var dashRoutes = require('./routes/dash.route');
 var cookieParser = require('cookie-parser');
 var authRoutes = require('./routes/auth.route');
 var authmiddleware = require('./middleware/auth.middleware');
+var infouserRoutes = require('./routes/profile.route');
 var logger = require('morgan');
-
 
 var app = express();
 
@@ -30,6 +30,8 @@ app.get('/', (req, res) => {
 app.use(express.static('public'));
 
 app.use('/dashboard', authmiddleware.requirelogin, dashRoutes);
+
+app.use('/userprofile', authmiddleware.requirelogin, infouserRoutes);
 
 app.use('/auth', authRoutes);
 
