@@ -1,0 +1,18 @@
+html
+  include head.pug
+  body
+    table.table
+        thead.thead-dark
+            tr
+            th(scope='col') #
+            th(scope='col') id
+            th(scope='col') Email
+            th(scope='col') Password
+        tbody
+            tr
+            th(scope='row') 1
+            td= user.id
+            td= user.email
+            td= user.password
+    
+    include js.pug

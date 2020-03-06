@@ -1,20 +1,16 @@
-module.exports.createpost = (req, res, next) => {
+module.exports.postlogin = (req, res, next) => {
     var errors = [];
-
-    if (!req.body.name) {
-        errors.push("Name is require.");
-    }
-
-    if (!req.body.phone) {
-        errors.push("Phone is require.");
-    }
 
     if (!req.body.email) {
         errors.push("Email is require.");
     }
 
+    if (!req.body.password) {
+        errors.push("Password is require.");
+    }
+
     if (errors.length) {
-        res.render('users/create', {
+        res.render('auth/login', {
             errors: errors,
             values: req.body
         });

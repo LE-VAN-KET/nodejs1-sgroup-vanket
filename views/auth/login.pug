@@ -1,0 +1,36 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title Document
+    link(href='https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900', rel='stylesheet')
+    link(rel='stylesheet', href='../css/bootstrap.min.css')
+    link(rel='stylesheet', href='../css/style.css')
+  body
+    .container
+      .row
+        .col-lg-4.offset-lg-4
+          .card.login-card
+            .card-header
+              h3.card-title Please Sign In
+            if errors
+              each error in errors
+                .alert.alert-danger= error
+            .card-body
+              form(action="/auth/login", method="POST")
+                .form-group
+                  label(for='email') Email
+                  input#email.form-control(placeholder='anhle1512001@gmail.com', type="text", name="email", value= values ? values.email : '')
+                .form-group
+                  label(for='password') Password
+                  input#password.form-control(placeholder='Password', type="password", name="password", value= values ? values.name : '')
+                .checkbox
+                  label
+                    input(name='remember', type='checkbox', value='Remember Me')
+                    | Remember Me
+                // Change this to a button or input when using this as a form
+                button.btn.btn-primary.btn-success.btn-block(type="submit") Login
+    script(src='https://code.jquery.com/jquery-3.4.1.slim.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
