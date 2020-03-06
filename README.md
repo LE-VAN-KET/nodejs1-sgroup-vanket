@@ -1,0 +1,1 @@
+use express port=5000 and bcrypt băm muối password user
