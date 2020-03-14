@@ -1,40 +1,85 @@
-var db = require('../db');
-// var md5 = require('md5-nodejs');
+require('dotenv').config();
+const knex = require('../db/knex');
+const errors = [];
+const bcrypt = require('../custom-bcrypt');
 
 module.exports.getlogin = (req, res) => {
-    res.render('auth/login');
+    res.render('auth/login', {
+        errors: errors
+    });
 };
 
 module.exports.postLogin = (req, res) => {
-    const bcrypt = require('../custom-bcrypt');
-    var email = req.body.email;
-    var password = req.body.password;
 
-    var user = db.get('users').find({ email: email}).value();
-    
-    if (!user) {
-        res.render('auth/login', {
-            errors: [
-                'User does not exist'
-            ],
-            values: req.body
-        });
-        return;
-    }
+    const emailReq = req.body.email;
+    const passwordReq = bcrypt.hash(req.body.password, {salt: process.env.salt, rounds: 20});
 
-    // var hashpassword = md5(password);
-
-    if (!bcrypt.compare(password, user.password)) {
-        res.render('auth/login', {
-            errors: [
-                'Wrong password'
-            ],
-            values: req.body
+    knex.select('email')
+    .from("users")
+    .where("email", emailReq)
+    .andWhere("password", passwordReq)
+    .then(async function(result) {
+            // const user = getUserData(emailReq);
+            const users = await knex("users");
+            if (result.length !== 0) {
+                //login           
+                let user = users.find(result => result.email = emailReq);
+                req.session.userId = user.id;
+                return res.redirect('/dashboard');
+            } else {
+                // failed login
+                return res.render('auth/login', {
+                    errors: [
+                        'User or password does not exist'
+                    ],
+                    values: req.body
+                })
+            }
         })
-    }
-
-    res.cookie('userId', user.id, {
-        signed: true
+    .catch(function(error) {
+        console.log(error);
     });
-    res.redirect('/dashboard');
+
 }
+
+module.exports.get_register = (req, res) => {
+    res.render('auth/register', {
+        errors: errors
+    });
+};
+
+module.exports.post_register = (req, res) => {
+
+    knex.select("email")
+    .from("users")
+    .where("email", req.body.email)
+    .then(async (emailList) => {
+        try {
+            const insertUser = await knex('users')
+                .insert({
+                name: req.body.name,
+                email: req.body.email,
+                password: bcrypt.hash(req.body.password, {salt: process.env.salt, rounds: 20})
+                })
+                .then(()=>{})
+            if (emailList.length === 0) {
+                insertUser;
+                return  res.redirect('/auth/login');
+            }
+        }
+        catch {
+            console.log('not inserting user');
+
+            return res.render('auth/register', {
+                errors: [
+                    'Email is already in use'
+                ],
+                values: req.body
+            })
+        }
+
+});
+
+}
+
+
