@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+    <%- include('../partials/head'); -%>
+</head> 
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4">
+                <div class="card login-card">
+                    <div class="card-header border-0 bg-success text-white">
+                        <h3 class="card-title title-register">Please Register</h3>
+                    </div>
+                    <div class="flashes mx-3">
+                        <% if (messages) { %>
+                           <% if (messages.error) { %>
+                                <% (messages.error).forEach( error => { %>
+                                    <div class="alert text-danger mb-0"><%= error.msg %></div>
+                                <% }) %>
+                                <% if (messages.error == 'Email is already in use') { %>
+                                    <div class="alert text-danger mb-0"><%= messages.error %></div>
+                               <% }%>
+                          <% } %>
+                        <% } %>
+                      </div>
+                    <!-- if errors -->
+                    <ul class="errors list-unstyled mx-3 p-0 my-0">
+                        <% if(errors) { %>
+                            <% errors.forEach( error => { %>
+                                <li class="alert text-danger p-0">
+                                    <%= error.msg %>
+                                </li>
+                            <% }) %>
+                         <% } %>
+                    </ul>
+                    <div class="card-body pt-0">
+                        <form action="/admin/auth/register" method="POST">
+                            <div id="u" class="form-group">
+                                <input class="form-control" spellcheck="false" id="username" type="text" name="name" size="18" alt="login" required>
+                                <span class="form-highlight"></span>
+                                <span class="form-bar"></span>
+                                <label for="username" class="float-label">Name</label>
+                                <erroru>
+                                  Username is required
+                                  <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24h-24z" fill="none"></path>
+                                  <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                                  </svg>
+                                  </i>
+                                </erroru>
+                            </div>
+                            <div id="e" class="form-group">
+                                <input class="form-control" spellcheck="false" id="email" type="text" name="email" size="18" alt="login" required>
+                                <span class="form-highlight"></span>
+                                <span class="form-bar"></span>
+                                <label for="email" class="float-label">Email</label>
+                                <erroru>
+                                  Email is required
+                                  <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24h-24z" fill="none"></path>
+                                  <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                                  </svg>
+                                  </i>
+                                </erroru>
+                            </div>
+                            <div id="p" class="form-group">
+                                <input class="form-control" spellcheck="false" id="password" type="password" name="password" size="18" alt="login" required>
+                                <span class="form-highlight"></span>
+                                <span class="form-bar"></span>
+                                <label for="password" class="float-label">Password</label>
+                                <erroru>
+                                  Password is required
+                                  <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24h-24z" fill="none"></path>
+                                  <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                                  </svg>
+                                  </i>
+                                </erroru>
+                            </div>
+                            <div id="configP" class="form-group">
+                                <input class="form-control" spellcheck="false" id="confirmPassword" type="password" name="confirmPassword" size="18" alt="login" required>
+                                <span class="form-highlight"></span>
+                                <span class="form-bar"></span>
+                                <label for="confirmPassword" class="float-label">ConfirmPassword</label>
+                                <erroru>
+                                    ConfirmPassword is required
+                                  <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24h-24z" fill="none"></path>
+                                  <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                                  </svg>
+                                  </i>
+                                </erroru>
+                            </div>
+                            <div id="dress" class="form-group">
+                                <input class="form-control" spellcheck="false" id="address" type="text" name="address" size="18" alt="login" required>
+                                <span class="form-highlight"></span>
+                                <span class="form-bar"></span>
+                                <label for="address" class="float-label">Address</label>
+                                <erroru>
+                                    Address is required
+                                  <i>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24h-24z" fill="none"></path>
+                                  <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                                  </svg>
+                                  </i>
+                                </erroru>
+                            </div>
+                            <!-- Change this to a button or input when using this as a form-->
+                            <button class="btn-submit d-block ml-auto w-circle overflow-hidden" type="submit" id="submit">
+                                <i class="fa fa-arrow-circle-right text-success" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/js'); -%>
+    <script id="rendered-js">
+        $(document).ready(function () {
+            var username = $('#username'),
+            password = $('#password'),
+            email = $('#email'),
+            configPass = $('#confirmPassword'),
+            address = $('#address'),
+            erroru = $('erroru'),
+            errorp = $('errorp'),
+            submit = $('#submit'),
+            udiv = $('#u'),
+            ediv = $('#e'),
+            pdiv = $('#p'),
+            configPdiv = $('#configP'),
+            dressdiv = $('#dress');
+        
+            username.blur(function () {
+                if (username.val() == '') {
+                    udiv.attr('errr', '');
+                } else {
+                    udiv.removeAttr('errr');
+                }
+            });
+
+            email.blur(function () {
+                if (email.val() == '') {
+                    ediv.attr('errr', '');
+                } else {
+                    ediv.removeAttr('errr');
+                }
+            });
+        
+            password.blur(function () {
+                if (password.val() == '') {
+                    pdiv.attr('errr', '');
+                } else {
+                    pdiv.removeAttr('errr');
+                }
+            });   
+
+            configPass.blur(function () {
+                if (configPass.val() == '') {
+                    configPdiv.attr('errr', '');
+                } else {
+                    configPdiv.removeAttr('errr');
+                }
+            });
+
+            address.blur(function () {
+                if (address.val() == '') {
+                    dressdiv.attr('errr', '');
+                } else {
+                    dressdiv.removeAttr('errr');
+                }
+            });
+
+        });
+
+      </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Product</title>
+    <%- include('../partials/head'); -%>   
+</head>
+<body class="bg-user">
+    <div class="container">
+        <h2 class="text-capitalize">Product</h2>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary text-capitalize float-right bg-success text-white" data-toggle="modal" data-target="#staticBackdropAdd">
+            Add product
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdropAdd" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Add product_type</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/products" method="POST">
+                            <div class="form-group">
+                                <label for="name">Product-name</label>
+                                <input class="form-control" id="name" type="text" name="productName" placeholder="Product type" required>
+                            </div>
+                            <div class="input-group mb-3 mx-3">
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="inputGroupSelect">Poduct-type</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect" name="option">
+                                    <% productTypes.forEach((productType) => { %>
+                                        <option><%= productType.id %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Product-description</label>
+                                <input class="form-control" id="description" type="text" name="productDescription" required>
+                            </div>
+                            <button type="submit"  class='btn btn-success align-center'>Add</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table boder-table w-100 mw-100">
+            <thead class="thead-user">
+                <tr>
+                    <th>id</th>
+                    <th>product_name</th>
+                    <th>product_type_id</th>
+                    <th>User_id</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <% products.forEach((product) => { %>
+                    <tr>
+                        <td><%= product.id %></td>
+                        <td><%= product.product_name %></td>
+                        <td><%= product.product_type_id %></td>
+                        <td><%= product.user_id %></td>
+                        <td class="text-primary"><%= moment(product.created_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td class="text-primary"><%= moment(product.updated_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdropShowProduct<%= product.id %>">
+                                Show
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdropShowProduct<%= product.id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Show product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/products" method="GET"> 
+                                                <div class="form-group">
+                                                    <label for="name">Product Name</label>
+                                                    <input class="form-control" id="name" type="text" value='<%= product.product_name %>' disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="product_type_id">product_type_id</label>
+                                                    <input class="form-control" id="product_type_id" type="text" name="product_type_id" value='<%= product.product_type_id %>' disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="product_desciption">product_desciption</label>
+                                                    <textarea class="form-control" id="product_description" disabled>
+                                                        <%= product.product_description %>
+                                                    </textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdrop<%= product.id %>">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop<%= product.id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title text-capitalize" id="staticBackdropLabel"> Are you sure you want to delete product?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body mx-auto">
+                                            <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form action="/admin/product/<%= product.id %>/delete?_method=DELETE" method="POST"> 
+                                                <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdropEdit<%= product.id %>">
+                                <i class="fa fa-pencil text-dark" aria-hidden="true"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdropEdit<%= product.id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Update product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/product/<%= product.id %>/update?_method=PUT" method="POST"> 
+                                                <div class="form-group">
+                                                    <label for="name">Product-name</label>
+                                                    <input class="form-control" id="name" type="text" name="productName" placeholder="Product type" value='<%= product.product_name %>' required>
+                                                </div>
+                                                <div class="input-group mb-3 mx-3">
+                                                    <div class="input-group-prepend">
+                                                      <label class="input-group-text" for="inputGroupSelect">Poduct-type</label>
+                                                    </div>
+                                                    <select class="custom-select" id="inputGroupSelect" name="option">
+                                                        <option selected><%= product.product_type_id %></option>
+                                                        <% productTypes.forEach((productType) => { %>
+                                                            <% if (productType.id !== product.product_type_id) { %>
+                                                                <option><%= productType.id %></option>
+                                                            <% } %>
+                                                        <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description">Product-description</label>
+                                                    <input class="form-control" id="description" type="text" name="productDescription" value='<%= product.product_description %>' required>
+                                                </div>
+                                                <button type="submit"  class='btn btn-success align-center'>Update</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('../partials/js'); -%>
+</body>
+</html>
