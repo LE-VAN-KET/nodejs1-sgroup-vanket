@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Show Product</title>
+    <%- include('../partials/head'); -%>
+</head>
+<body class="bg-user">
+    <div class="constainer">
+        <div class="row">
+            <div class="card col-lg-4 m-3">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap">
+                        <label for="ProductName" class="text-capitalize" style="width: 40%;"><strong>Product Name :</strong></label>
+                        <div id="ProductName" style="width: 60%;"><%= product.product_name %></div>
+                        <label for="ProductType" class="text-capitalize" style="width: 40%;"><strong>Product Type:</strong></label>
+                        <div id="ProductType" style="width: 60%;"><%= product.product_type_name %></div>
+                        <label for="product_desciption" class="text-capitalize" style="width: 40%;"><strong>Product Desciption:</strong></label>
+                        <textarea id="product_description" style="width: 60%;">
+                            <%= product.product_description %>
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/js'); -%>
+</body>
+</html>

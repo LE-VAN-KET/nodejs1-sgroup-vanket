@@ -1,4 +1,6 @@
 const express = require('express');
+const multer  = require('multer');
+const upload = multer({ dest: 'public/uploads/' });
 
 const router = express.Router();
 
@@ -38,6 +40,7 @@ const {
     readAllProducts,
     updateProduct,
     deleteProduct,
+    readOneProduct
 } = require('../app/admin/product/controller/product.controller');
 
 router.get('/', notAuth);
@@ -90,7 +93,7 @@ router.delete('/product_type/:product_type_id/delete', notAuth, deleteProductTyp
 
 router.route('/products')
     .get(notAuth, readAllProducts)
-    .post(notAuth, createProducts);
+    .post(notAuth, upload.single('imageProduct'), createProducts);
 /**
  * update Product
  * delete Product
@@ -101,6 +104,8 @@ router.delete('/product/:product_id/delete', notAuth, deleteProduct);
 /**
  * show all product on product-type-id
  */
-router.get('/product/:product_type_id', readAllProductTypeId);
+router.get('/product/:product_type_id', notAuth, readAllProductTypeId);
+
+router.get('/product/show/:product_slug', notAuth, readOneProduct);
 
 module.exports = router;

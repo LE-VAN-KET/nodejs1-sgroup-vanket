@@ -12,6 +12,7 @@ const methodOverride = require('method-override');
 const moment = require('moment');
 
 const adminRoute = require('./routes/adminRoute');
+const clientProductRoute = require('./routes/clientProductRoute');
 const { sessionModules } = require('./config/session');
 
 const app = express();
@@ -55,6 +56,8 @@ app.get('*', (req, res, next) => {
 app.get('/', (req, res) => res.redirect('/admin/auth/login'));
 
 app.use('/admin', adminRoute);
+
+app.use('/products', express.static(path.join(__dirname, 'public')), clientProductRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

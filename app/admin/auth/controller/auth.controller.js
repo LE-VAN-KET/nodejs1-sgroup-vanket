@@ -91,10 +91,10 @@ const postLogin = async (req, res) => {
         });
 };
 
-const getLogout = async (req, res) => {
+const getLogout = (req, res) => {
     delete req.session.userEmail;
-    await req.flash('error', 'your account logout successful');
-    await req.session.destroy((err) => {
+    req.flash('error', 'your account logout successful');
+    req.session.destroy((err) => {
         if (err) {
             return res.redirect('/admin/dashboard');
         }

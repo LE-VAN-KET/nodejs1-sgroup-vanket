@@ -15,7 +15,7 @@ const getTable = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const { password, address } = await req.body;
+    const { password, address } = req.body;
     await bcrypt.hash(password, salt, (err, hash) => {
         if (err) throw err;
 

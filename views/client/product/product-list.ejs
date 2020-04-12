@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Product</title>
+    <%- include('../../admin/partials/head'); -%>
+</head>
+<body>
+    <div class="sidebar-container">
+        <div class="sidebar-logo">
+            Product Types
+        </div>
+        <ul class="sidebar-navigation">
+            <% productTypes.forEach( product_type => { %>
+                <li>
+                    <a href="/products/<%= product_type.product_type_slug %>">
+                        <i class="fa fa-users" aria-hidden="true"></i> <%= product_type.product_type_name %>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+    <div class="content-container">
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <div class="row row-cols-1 row-cols-md-4">
+                    <% products.forEach((product) => { %>
+                        <div class="col mb-3">
+                            <div class="card h-100">
+                                <img src=<%= product.image %> class="card-img-top" alt="...">
+                                <div class="card-body">
+                                  <h5 class="card-title"><%= product.product_name %></h5>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../../admin/partials/js'); -%>
+</body>
+</html>
