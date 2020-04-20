@@ -5,7 +5,7 @@ const readAllProducts = async (req, res) => {
     const productTypes = await knex('product_types').select('id');
     const products = await knex('product').select('product.*', 'table_users.name as userCreate', 'product_types.product_type_name')
         .leftJoin('table_users', 'table_users.id', 'product.user_id')
-        .leftJoin('product_types', 'product.product_type_id', 'product_types.id');
+        .leftJoin('product_types', 'product.product_type_slug', 'product_types.product_type_slug');
     return res.render('admin/products/product', {
         productTypes,
         products,

@@ -1,7 +1,17 @@
 const express = require('express');
 const multer = require('multer');
 
-const upload = multer({ dest: 'public/uploads/' });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}.png`);
+    },
+  });
+
+// const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ storage });
 
 const router = express.Router();
 
