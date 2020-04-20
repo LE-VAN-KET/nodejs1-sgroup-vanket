@@ -11,31 +11,27 @@ const readAllProductTypes = async (req, res) => {
 
 const createProductType = async (req, res) => {
     const userId = await knex('table_users').select('id').where({ email: req.session.userEmail }).first();
-    const productTypeSlug = slugify(`product type ${req.body.product_type_name}`, {
+    const productTypeSlug = slugify(`product type ${req.body.productTypeName}`, {
         replacement: '-',
-        lower: true,       
+        lower: true,
       });
     const newProductType = await {
         user_id: userId.id,
-        product_type_name: req.body.product_type_name,
+        product_type_name: req.body.productTypeName,
         product_type_slug: productTypeSlug,
     };
-    knex('product_types').select().insert(newProductType)
-    .catch((err) => {
-        req.flash('error', 'Product Type Name already exist');
-        return res.redirect('/admin/product_types');
-    });
+    await knex('product_types').select().insert(newProductType);
     return res.redirect('/admin/product_types');
 };
 
 const updateProductType = async (req, res) => {
     const { productTypeName } = req.body;
-    const productTypeSlug = slugify(`product type ${productName}`, {
+    const productTypeSlug = slugify(`product type ${productTypeName}`, {
         replacement: '-',
-        lower: true,       
+        lower: true,
       });
     await knex('product_types').select()
-        .update({ product_type_name: productTypeName, product_type_slug: productTypeSlug,})
+        .update({ product_type_name: productTypeName, product_type_slug: productTypeSlug })
         .where({ id: req.params.product_type_id })
         .catch((err) => {
             res.error(err);
@@ -50,8 +46,9 @@ const deleteProductType = async (req, res) => {
 
 const readAllProductTypeId = async (req, res) => {
     const productTypes = await knex('product_types').select('id');
-    const products = await knex('product').select('product.*', 'table_users.name as userCreate')
+    const products = await knex('product').select('product.*', 'table_users.name as userCreate', 'product_types.product_type_name')
         .leftJoin('table_users', 'table_users.id', 'product.user_id')
+        .leftJoin('product_types', 'product.product_type_id', 'product_types.id')
         .where('product.product_type_id', req.params.product_type_id);
     return res.render('admin/products/product', {
         products,

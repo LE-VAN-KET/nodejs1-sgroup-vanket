@@ -6,7 +6,7 @@ exports.up = (knex) => knex.schema.createTable('product', (table) => {
     table.integer('product_type_id').unsigned();
     table.foreign('product_type_id').references('id').inTable('product_types').onDelete('CASCADE')
     .onUpdate('CASCADE');
-    table.string('product_name', 255).unique().notNullable();
+    table.string('product_name', 255).notNullable();
     table.text('product_description').notNullable();
     table.string('image', 255).notNullable();
     table.string('product_slug', 255).unique();

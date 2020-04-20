@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login</title>
+  <%- include('../../admin/partials/head'); -%>
+</head>
+<body class="body-login">
+  <div class="container mt-5">
+      <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-lg-4 col-sm-8">
+              <div class="card login-card">
+                  <div class="card-header login text-white text-center">
+                    <div class="photo"></div>
+                    <span class="text-dark">Please Sign in </span>
+                  </div>
+                  <div class="flashes mx-3">
+                    <% if (messages) { %>
+                      <% if (messages.success) { %>
+                        <div class="alert text-success mb-0"><%= messages.success %></div>
+                      <% } else if (messages.error) { %>
+                        <div class="alert text-danger mb-0"><%= messages.error %></div>
+                      <% } %>
+                    <% } %>
+                  </div>
+                  <!-- if errors -->
+                  <ul class="errors  list-unstyled m-0">
+                    <% if(errors) { %>
+                        <% errors.forEach( error => { %>
+                            <li class="alert text-danger mb-0 mx-3">
+                                <%= error.msg %>
+                            </li>
+                        <% }) %>
+                     <% } %>
+                  </ul> 
+                    
+                  <div class="card-body">
+                      <form action="/auth/login" method="POST" id="login-form"> 
+                        <div id="u" class="form-group">
+                          <input class="form-control" spellcheck="false" id="username" type="text" name="email" size="18" alt="login" required>
+                          <span class="form-highlight"></span>
+                          <span class="form-bar"></span>
+                          <label for="username" class="float-label">Email</label>
+                          <erroru>
+                            Email is required
+                            <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24h-24z" fill="none"></path>
+                            <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                            </svg>
+                            </i>
+                          </erroru>
+                        </div>
+                        <div id="p" class="form-group">
+                          <input class="form-control" spellcheck="false" id="password" type="password" name="password" size="18" alt="login" required>
+                          <span class="form-highlight"></span>
+                          <span class="form-bar"></span>
+                          <label for="password" class="float-label">Password</label>
+                          <errorp>
+                            Password is required
+                            <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24h-24z" fill="none"></path>
+                            <path d="M1 21h22l-11-19-11 19zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                            </svg>
+                            </i>
+                          </errorp>
+                        </div>
+                        <div class="checkbox d-inline-block">
+                          <label><input name="remember" type="checkbox" value="Remember Me"/>Remember Me</label>
+                        </div>
+                        <!-- Change this to a button or input when using this as a form-->
+                        <button class="btn btn-primary float-right" type="submit" id="submit">Sign In</button>
+                      </form>
+                  </div>
+                  <a href='/auth/register' class='text-capitalize text-center mx-3 mb-3 d-inline-block mx-auto'>Register</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <%- include('../../admin/partials/js'); -%>
+  <script id="rendered-js">
+    $(document).ready(function () {
+      var username = $('#username'),
+      password = $('#password'),
+      erroru = $('erroru'),
+      errorp = $('errorp'),
+      submit = $('#submit'),
+      udiv = $('#u'),
+      pdiv = $('#p');
+    
+      username.blur(function () {
+        if (username.val() == '') {
+          udiv.attr('errr', '');
+        } else {
+          udiv.removeAttr('errr');
+        }
+      });
+    
+      password.blur(function () {
+        if (password.val() == '') {
+          pdiv.attr('errr', '');
+        } else {
+          pdiv.removeAttr('errr');
+        }
+      });   
+    });
+  </script>
+</body>
+</html>

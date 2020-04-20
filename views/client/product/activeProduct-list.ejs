@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Product</title>
+    <%- include('../../admin/partials/head'); -%>
+</head>
+<body>
+    <div class="container d-flex flex-wrap">
+        <div class="col-4">
+            <img src="../../<%= product.image %>" class="w-100 h-auto" alt="...">
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary text-capitalize ml-2 mt-2" data-toggle="modal" data-target="#staticBackdrop">
+                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog" role="dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-capitalize"> Are you sure you want to delete product?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body mx-auto">
+                            <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <form action="../../../product/<%= product.product_slug %>/delete?_method=DELETE" method="POST"> 
+                                <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary text-capitalize ml-2 mt-2" data-toggle="modal" data-target="#staticBackdropEdit">
+                <i class="fa fa-pencil text-dark" aria-hidden="true"></i>
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdropEdit" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog" role="admin">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Update product</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="../../../product/<%= product.product_slug %>/update?_method=PUT" method="POST"> 
+                                <div class="form-group">
+                                    <label for="name">Product-name</label>
+                                    <input class="form-control" id="name" type="text" name="productName" placeholder="Product type" value='<%= product.product_name %>' required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Product-description</label>
+                                    <input class="form-control" id="description" type="text" name="productDescription" value='<%= product.product_description %>' required>
+                                </div>
+                                <button type="submit"  class='btn btn-success align-center'>Update</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <ul class="d-flex flex-wrap list-unstyled">
+                <li class="w-50 text-capitalize">Product Name :</li>
+                <li class="w-50">
+                    <%= product.product_name %> 
+                </li>
+                <li class="w-50 text-capitalize">Product Type :</li>
+                <li class="w-50">
+                    <%= product.product_type_name %> 
+                </li>
+            </ul>
+            <label for="description" class="w-100">Product description:</label>
+            <textarea disabled id="description w-100" row="10" col="10"><%= product.product_description %></textarea>
+        </div>
+
+    </div>
+    <%- include('../../admin/partials/js'); -%>
+</body>
+</html>

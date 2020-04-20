@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
@@ -7,7 +6,7 @@ const knex = require('../../../../model/knex');
 const salt = 10;
 
 // get register
-const getRegister = (req, res) => res.render('admin/auth/register', {
+const getRegister = (req, res) => res.render('client/auth/register', {
         errors: '',
     });
 
@@ -20,7 +19,7 @@ const postRegister = (req, res) => {
 
 	if (!errors.isEmpty()) {
         req.flash('error', errors.array());
-        return res.redirect('/admin/auth/register');
+        return res.redirect('/auth/register');
 	}
     // CReating a MOdal for New User
     const newUser = {
@@ -36,25 +35,25 @@ const postRegister = (req, res) => {
 
         // Create New User
         await knex('table_users').insert(newUser)
-        .catch((error) => {
+        .catch(() => {
             req.flash('error', 'Email is already in use');
-            return res.redirect('/admin/auth/register');
+            return res.redirect('/auth/register');
         });
-
-        const roleId = await knex('table_users').select('id').where('email', email).first();
-
-        const roleNew = { role_id: roleId.id, role_name: 'admin' };
-
-        await knex('role').insert(roleNew);
 
         // Success Message
         req.flash('success', `${name} are now registered and may log in`);
 
-        return res.redirect('/admin/auth/login');
+        const roleId = await knex('table_users').select('id').where('email', email).first();
+
+        const roleNew = { role_id: roleId.id, role_name: 'user' };
+
+        await knex('role').insert(roleNew);
+
+        return res.redirect('/auth/login');
     });
 };
 
-const getLogin = (req, res) => res.render('admin/auth/login', {
+const getLogin = (req, res) => res.render('client/auth/login', {
         errors: '',
     });
 
@@ -74,7 +73,7 @@ const postLogin = async (req, res) => {
     // Check for Errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-		return res.render('admin/auth/login', {
+		return res.render('client/auth/login', {
 			errors: errors.array(),
 			email,
             password,
@@ -83,21 +82,21 @@ const postLogin = async (req, res) => {
     } if (User.length === 0) {
         // Not exist Email user
         req.flash('error', 'Email is not exist');
-        return res.redirect('/admin/auth/login');
+        return res.redirect('/auth/login');
     }
-        comparePassword(password, User.password, (err, isMatch) => {
-            if (err) throw err;
-            if (isMatch) {
-                // Success Message
-                // req.flash("success",'You are Logged In');
-                req.session.userEmail = email;
-                req.session.role = User.role_name;
-                return res.redirect('/admin/dashboard');
-            }
-                // failed to login
-                req.flash('error', 'Wrong password');
-                return res.redirect('/admin/auth/login');
-        });
+    comparePassword(password, User.password, (err, isMatch) => {
+        if (err) throw err;
+        if (isMatch) {
+            // Success Message
+            // req.flash("success",'You are Logged In');
+            req.session.role = User.role_name;
+            req.session.userEmail = email;
+            return res.redirect('/products');
+        }
+            // failed to login
+            req.flash('error', 'Wrong password');
+            return res.redirect('/auth/login');
+    });
 };
 
 const getLogout = (req, res) => {
@@ -105,14 +104,12 @@ const getLogout = (req, res) => {
     req.flash('error', 'your account logout successful');
     req.session.destroy((err) => {
         if (err) {
-            return res.redirect('/admin/dashboard');
+            return res.redirect('/products');
         }
         res.clearCookie(process.env.SESS_NAME);
-       return res.redirect('/admin/auth/login');
+       return res.redirect('/auth/login');
     });
 };
-
-const getDash = (req, res) => res.render('admin/home/dashboard');
 
 module.exports = {
     getRegister,
@@ -120,5 +117,4 @@ module.exports = {
     getLogout,
     postRegister,
     postLogin,
-    getDash,
 };

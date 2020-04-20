@@ -12,7 +12,7 @@ const methodOverride = require('method-override');
 const moment = require('moment');
 
 const adminRoute = require('./routes/adminRoute');
-const clientProductRoute = require('./routes/clientProductRoute');
+const clientRoute = require('./routes/clientRoute');
 const { sessionModules } = require('./config/session');
 
 const app = express();
@@ -33,7 +33,6 @@ app.use(sessionModules);
 
 app.use(flash());
 app.use((req, res, next) => {
-  // res.locals.messages = req.flash();
   res.locals = {
     messages: req.flash(),
     moment,
@@ -53,11 +52,11 @@ app.get('*', (req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => res.redirect('/admin/auth/login'));
+app.get('/', (req, res) => res.redirect('/auth/login'));
 
 app.use('/admin', adminRoute);
 
-app.use('/products', express.static(path.join(__dirname, 'public')), clientProductRoute);
+app.use('/', clientRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

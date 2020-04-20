@@ -1,20 +1,13 @@
 const express = require('express');
-const multer  = require('multer');
+const multer = require('multer');
+
 const upload = multer({ dest: 'public/uploads/' });
 
 const router = express.Router();
 
 const { validateRegister, validateLogin } = require('../app/admin/auth/middleware/auth.validate');
 
-const {
-    getTable,
-    updateUser,
-    deleteUser,
-    postAddUser,
-    profile,
-    viewUser,
-    searchUser,
-} = require('../app/admin/user/controller/users.controller');
+const userController = require('../app/admin/user/controller/users.controller');
 
 const {
     getRegister,
@@ -40,7 +33,7 @@ const {
     readAllProducts,
     updateProduct,
     deleteProduct,
-    readOneProduct
+    readOneProduct,
 } = require('../app/admin/product/controller/product.controller');
 
 router.get('/', notAuth);
@@ -60,22 +53,22 @@ router.get('/auth/logout', notAuth, getLogout);
 
 router.get('/dashboard', notAuth, getDash);
 
-router.get('/userprofile', notAuth, profile);
+router.get('/userprofile', notAuth, userController.profile);
 
 // show all info user
 router.route('/table')
-    .get(notAuth, getTable)
-    .post(notAuth, validateRegister(), postAddUser);
+    .get(notAuth, userController.getTable)
+    .post(notAuth, validateRegister(), userController.postAddUser);
 
-router.get('/table/search', searchUser);
+router.get('/table/search', userController.searchUser);
 
 // delete and update profile user
 router.route('/table/user/:id')
-    .put(notAuth, updateUser)
-    .delete(notAuth, deleteUser);
+    .put(notAuth, userController.updateUser)
+    .delete(notAuth, userController.deleteUser);
 
 // view user profile
-router.get('/user/:id', notAuth, viewUser);
+router.get('/user/:id', notAuth, userController.viewUser);
 
 /**
  * Read all product-types

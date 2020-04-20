@@ -21,16 +21,56 @@
     </div>
     <div class="content-container">
         <div class="container-fluid">
-            <div class="jumbotron">
+            <div class="jumbotron bg-white">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-primary text-capitalize float-right bg-success text-white" data-toggle="modal" data-target="#staticBackdropAdd">
+                    Add product
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdropAdd" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Add product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/products" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="name">Product-name</label>
+                                        <input class="form-control" id="name" type="text" name="productName" placeholder="Product Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="input-group-text" for="Product-Type">Poduct type</label>
+                                        <input class="form-control" id="Product-Type" type="text" name="ProductTypeName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Product-description</label>
+                                        <input class="form-control" id="description" type="text" name="productDescription" required>
+                                    </div>
+                                    <input type="file" name="imageProduct" class="d-block mb-3 ml-3"  required/>
+                                    <button type="submit"  class='btn btn-success align-center'>Add</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row row-cols-1 row-cols-md-4">
                     <% products.forEach((product) => { %>
                         <div class="col mb-3">
-                            <div class="card h-100">
-                                <img src=<%= product.image %> class="card-img-top" alt="...">
-                                <div class="card-body">
-                                  <h5 class="card-title"><%= product.product_name %></h5>
+                            <a href="/product/read/<%= product.product_slug %>" class="w-auto h-auto">
+                                <div class="card h-100">
+                                    <img src="../<%= product.image %>" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                      <h5 class="card-title"><%= product.product_name %></h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     <% }) %>
                 </div>
