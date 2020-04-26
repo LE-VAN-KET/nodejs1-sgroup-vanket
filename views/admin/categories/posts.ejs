@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Posts</title>
+    <%- include('../partials/head'); -%>   
+</head>
+<body class="bg-user">
+    <div class="container">
+        <h2 class="text-capitalize">Posts</h2>
+        <div class="flashes mx-3">
+            <% if (messages) { %>
+               <% if (messages.error) { %>
+                    <% (messages.error).forEach( error => { %>
+                        <div class="alert text-danger mb-0"><%= error.msg %></div>
+                    <% }) %>
+                    <% if (messages.error == 'Email is already in use') { %>
+                        <div class="alert text-danger mb-0"><%= messages.error %></div>
+                   <% }%>
+              <% } %>
+            <% } %>
+        </div>
+        <!-- add post -->
+        <a type="button" class='btn btn-outline-primary text-capitalize float-right bg-success text-white' href='/admin/post/add'>Add Post</a>
+        <table class="table boder-table w-100 mw-100">
+            <thead class="thead-user">
+                <tr>
+                    <th>post_id</th>
+                    <th>post_title</th>
+                    <th>category_name</th>
+                    <th>User_create</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <% postsCategories.forEach((post) => { %>
+                    <tr>
+                        <td><%= post.post_id %></td>
+                        <td><%= post.post_title %></td>
+                        <td><%= post.category_name %></td>
+                        <td><%= post.userCreate %></td>
+                        <td class="text-primary"><%= moment(post.created_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td class="text-primary"><%= moment(post.updated_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td>
+                            <a type="button" class='btn btn-secondary text-white align-center text-capitalize d-inline-block' href='/admin/posts/<%= post.post_slug %>/show'>View</a>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdrop<%= post.post_id %>">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop<%= post.post_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title text-capitalize" id="staticBackdropLabel"> Are you sure you want to delete post here?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body mx-auto">
+                                            <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form action="/admin/posts/<%= post.post_slug %>/delete?_method=DELETE" method="POST"> 
+                                                <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- update post -->
+                            <a type="button" class='btn btn-secondary text-white align-center text-capitalize d-inline-block' href='/admin/posts/<%= post.post_slug %> /update'><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('../partials/js'); -%>
+</body>
+</html>

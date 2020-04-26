@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Categories</title>
+    <%- include('../../admin/partials/head'); -%>
+    <script src="https://cdn.tiny.cloud/1/az8ovn3cip98czqqldflxmtcmmmj1twxvs4dw9zv49y60hbh/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+<body>
+    <div class="sidebar-container">
+        <div class="sidebar-logo">
+            Categories
+        </div>
+        <ul class="sidebar-navigation">
+            <% categories.forEach( category => { %>
+                <li>
+                    <a href="/categories/<%= category.category_slug %>">
+                        <i class="fa fa-users" aria-hidden="true"></i> <%= category.category_name %>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+    <div class="content-container">
+        <div class="container-fluid">
+            <a type="button" class='btn btn-outline-primary text-capitalize float-right bg-success text-white' href='/posts/add'>Add Post</a>
+            <% posts.forEach((post) => { %>
+                <div class="ml-5">
+                    <h3><%= post.post_title %> </h3>
+                    <%- post.post_content %>
+                </div>
+                <!-- update post -->
+                <a type="button" class='btn btn-secondary text-white align-center text-capitalize d-inline-block' href='/posts/<%= post.post_slug %>/update'><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdrop<%= post.post_id %>">
+                    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop<%= post.post_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel"> Are you sure you want to delete post here?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body mx-auto">
+                                <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form action="/posts/<%= post.post_slug %>/delete?_method=DELETE" method="POST"> 
+                                    <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            <% }) %>
+        </div>
+    </div>
+    <%- include('../../admin/partials/js'); -%>
+    <script>
+        tinymce.init({
+          selector: 'textarea',
+          plugins: ['a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+            ],
+          toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help' + 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+          toolbar_mode: 'floating',
+          tinycomments_mode: 'embedded',
+          tinycomments_author: 'Author name',
+        });
+    </script>
+</body>
+</html>

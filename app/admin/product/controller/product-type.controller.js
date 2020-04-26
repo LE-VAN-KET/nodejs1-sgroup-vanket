@@ -15,12 +15,15 @@ const createProductType = async (req, res) => {
         replacement: '-',
         lower: true,
       });
-    const newProductType = await {
+    const newProductType = {
         user_id: userId.id,
         product_type_name: req.body.productTypeName,
         product_type_slug: productTypeSlug,
     };
-    await knex('product_types').select().insert(newProductType);
+    await knex('product_types').insert(newProductType)
+    .catch((err) => {
+        return res.redirect('/admin/product_types');
+    });
     return res.redirect('/admin/product_types');
 };
 
@@ -50,10 +53,7 @@ const readAllProductTypeId = async (req, res) => {
         .leftJoin('table_users', 'table_users.id', 'product.user_id')
         .leftJoin('product_types', 'product.product_type_id', 'product_types.id')
         .where('product.product_type_id', req.params.product_type_id);
-    return res.render('admin/products/product', {
-        products,
-        productTypes,
-    });
+    return res.render('admin/products/product', { products, productTypes });
 };
 
 module.exports = {

@@ -31,25 +31,18 @@ const postRegister = (req, res) => {
     };
     bcrypt.hash(newUser.password, salt, async (err, hash) => {
         if (err) throw err;
-
         newUser.password = await hash; // set hash password
-
         // Create New User
         await knex('table_users').insert(newUser)
         .catch((error) => {
             req.flash('error', 'Email is already in use');
             return res.redirect('/admin/auth/register');
         });
-
         const roleId = await knex('table_users').select('id').where('email', email).first();
-
         const roleNew = { role_id: roleId.id, role_name: 'admin' };
-
         await knex('role').insert(roleNew);
-
         // Success Message
         req.flash('success', `${name} are now registered and may log in`);
-
         return res.redirect('/admin/auth/login');
     });
 };
@@ -80,24 +73,25 @@ const postLogin = async (req, res) => {
             password,
             message: '',
 		});
-    } if (User.length === 0) {
+    }
+    if (User.length === 0) {
         // Not exist Email user
         req.flash('error', 'Email is not exist');
         return res.redirect('/admin/auth/login');
     }
-        comparePassword(password, User.password, (err, isMatch) => {
-            if (err) throw err;
-            if (isMatch) {
-                // Success Message
-                // req.flash("success",'You are Logged In');
-                req.session.userEmail = email;
-                req.session.role = User.role_name;
-                return res.redirect('/admin/dashboard');
-            }
-                // failed to login
-                req.flash('error', 'Wrong password');
-                return res.redirect('/admin/auth/login');
-        });
+    comparePassword(password, User.password, (err, isMatch) => {
+        if (err) throw err;
+        if (isMatch) {
+            // Success Message
+            // req.flash("success",'You are Logged In');
+            req.session.userEmail = email;
+            req.session.role = User.role_name;
+            return res.redirect('/admin/dashboard');
+        }
+        // failed to login
+        req.flash('error', 'Wrong password');
+        return res.redirect('/admin/auth/login');
+    });
 };
 
 const getLogout = (req, res) => {

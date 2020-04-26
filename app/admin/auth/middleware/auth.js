@@ -1,6 +1,6 @@
 
 const notAuth = (req, res, next) => {
-    if (!(req.session.userEmail && req.session.role)) {
+    if (!req.session.userEmail || req.session.role === 'user') {
       return res.redirect('/auth/login');
     }
     next();

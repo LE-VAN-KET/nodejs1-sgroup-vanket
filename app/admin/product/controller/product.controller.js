@@ -21,7 +21,7 @@ const createProducts = async (req, res) => {
       });
     const productTypeSlug = knex('product_types').select('product_type_slug')
       .where('id', option);
-    await knex('product').select().insert({
+    await knex('product').insert({
         user_id: userId.id,
         product_name: productName,
         product_description: productDescription,
@@ -30,7 +30,7 @@ const createProducts = async (req, res) => {
         product_slug: productSlug,
         product_type_slug: productTypeSlug,
     }).catch((err) => {
-        return res.redirect('/admin/products');
+        res.status(501, { message: err });
     });
     return res.redirect('/admin/products');
 };
@@ -53,7 +53,7 @@ const updateProduct = async (req, res) => {
         })
         .where({ id: req.params.product_id })
         .catch((err) => {
-            res.error(err);
+            res.status(501, { message: err });
         });
     return res.redirect('/admin/products');
 };

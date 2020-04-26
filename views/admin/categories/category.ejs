@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Categories</title>
+    <%- include('../partials/head'); -%>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-capitalize">Caegories</h1>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary text-capitalize float-right bg-success text-white" data-toggle="modal" data-target="#staticBackdropAdd">
+            Add
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdropAdd" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Add category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/categories" method="POST">
+                            <div class="form-group">
+                                <label for="name">category name</label>
+                                <input class="form-control" id="name" type="text" name="categoryName" required>
+                            </div>
+                            <button type="submit"  class='btn btn-success align-center'>Add</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table boder-table">
+            <thead class="thead-user">
+                <tr>
+                    <th scope='col'>category_id</th>
+                    <th scope='col'>category name</th>
+                    <th scope='col'>user created</th>
+                    <th scope='col'>Created At</th>
+                    <th scope='col'>Updated At</th>
+                    <th scope='col'>Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <% categories.forEach( category => { %>
+                    <tr>
+                        <td><%= category.category_id %></td>
+                        <td><%= category.category_name %></td>
+                        <td class="d-flex align-items-center justify-items-center">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdropShowUser<%= category.category_id %>">
+                                Show
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdropShowUser<%= category.category_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel">User create category</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/categories" method="GET">
+                                                <div class="form-group">
+                                                    <label for="name">Name</label>
+                                                    <input class="form-control" id="name" type="text" value='<%= category.name %>' disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input class="form-control" id="email" type="text" name="email" value='<%= category.email %>' disabled>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-primary"><%= moment(category.created_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td class="text-primary"><%= moment(category.updated_at).format('MMMM Do YYYY, h:mm:ss ') %></td>
+                        <td class="d-flex align-items-center justify-items-center">
+                            <a type="button" class='btn btn-secondary text-white align-center text-capitalize d-inline-block' href='/admin/posts/<%= category.category_slug %>'>show</a>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdropDel<%= category.category_id %>">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdropDel<%= category.category_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title text-capitalize" id="staticBackdropLabel"> Are you sure you want to delete category?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body mx-auto">
+                                            <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form action="/admin/categories/<%= category.category_slug %>/delete?_method=DELETE" method="POST">
+                                                <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-primary text-capitalize ml-2" data-toggle="modal" data-target="#staticBackdropEdit<%= category.category_id %>">
+                                <i class="fa fa-pencil text-dark" aria-hidden="true"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdropEdit<%= category.category_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-capitalize" id="staticBackdropLabel">Update category</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/categories/<%= category.category_slug %>/update?_method=PUT" method="POST"> 
+                                                <div class="form-group">
+                                                    <label for="name">Category Name</label>
+                                                    <input class="form-control" id="name" type="text" name="categoryName" value='<%= category.category_name %>' required>
+                                                </div>
+                                                <button type="submit"  class="btn btn-success align-center">Update</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+      
+                        </td>
+                    </tr>
+                <% }) %>
+    
+            </tbody>
+        </table>
+    </div>
+    <%- include('../partials/js') -%>
+</body>
+</html>

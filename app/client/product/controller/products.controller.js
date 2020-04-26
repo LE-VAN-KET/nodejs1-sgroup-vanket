@@ -65,9 +65,9 @@ const createProduct = async (req, res) => {
         product_type_name: ProductTypeName,
         product_type_slug: productTypeSlug,
     };
-    await knex('product_types').select().insert(newProductType)
+    await knex('product_types').insert(newProductType)
         .catch((err) => res.status(500, { message: err }));
-    await knex('product').select().insert({
+    await knex('product').insert({
         user_id: userId.id,
         product_name: productName,
         product_description: productDescription,

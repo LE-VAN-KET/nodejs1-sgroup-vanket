@@ -10,15 +10,11 @@ const storage = multer.diskStorage({
     },
   });
 
-// const upload = multer({ dest: 'public/uploads/' });
 const upload = multer({ storage });
-
 const router = express.Router();
 
 const { validateRegister, validateLogin } = require('../app/admin/auth/middleware/auth.validate');
-
 const userController = require('../app/admin/user/controller/users.controller');
-
 const {
     getRegister,
     getLogin,
@@ -46,6 +42,9 @@ const {
     readOneProduct,
 } = require('../app/admin/product/controller/product.controller');
 
+const categoryController = require('../app/admin/category/controller/category.controller');
+const postController = require('../app/admin/category/controller/post.controller');
+
 router.get('/', notAuth);
 
   // register
@@ -68,14 +67,14 @@ router.get('/userprofile', notAuth, userController.profile);
 // show all info user
 router.route('/table')
     .get(notAuth, userController.getTable)
-    .post(notAuth, validateRegister(), userController.postAddUser);
+    .post(notAuth, userAuth, validateRegister(), userController.postAddUser);
 
 router.get('/table/search', userController.searchUser);
 
 // delete and update profile user
 router.route('/table/user/:id')
-    .put(notAuth, userController.updateUser)
-    .delete(notAuth, userController.deleteUser);
+    .put(notAuth, userAuth, userController.updateUser)
+    .delete(notAuth, userAuth, userController.deleteUser);
 
 // view user profile
 router.get('/user/:id', notAuth, userController.viewUser);
@@ -110,5 +109,31 @@ router.delete('/product/:product_id/delete', notAuth, deleteProduct);
 router.get('/product/:product_type_id', notAuth, readAllProductTypeId);
 
 router.get('/product/show/:product_slug', notAuth, readOneProduct);
+
+/**
+ * Read all categories
+ * add category new
+ */
+router.route('/categories')
+    .get(notAuth, categoryController.readAllCatogories)
+    .post(notAuth, categoryController.createCategory);
+
+router.put('/categories/:category_slug/update', notAuth, categoryController.updateCategory);
+router.delete('/categories/:category_slug/delete', notAuth, categoryController.deleteCategory);
+
+router.get('/posts/:category_slug', notAuth, categoryController.readAllCategorySlug);
+
+router.route('/posts')
+    .get(notAuth, postController.readAllPosts);
+router.route('/post/add')
+    .get(notAuth, postController.getCreatePost)
+    .post(notAuth, postController.createPost);
+
+router.delete('/posts/:post_slug/delete', notAuth, postController.deletePost);
+router.route('/posts/:post_slug/update')
+    .get(notAuth, postController.getupdatePost)
+    .put(notAuth, postController.updatePost);
+
+router.get('/posts/:post_slug/show', notAuth, postController.readOnePost);
 
 module.exports = router;
