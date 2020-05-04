@@ -91,11 +91,11 @@ const postLogin = async (req, res) => {
             // req.flash("success",'You are Logged In');
             req.session.role = User.role_name;
             req.session.userEmail = email;
-            return res.redirect('/products');
+            return res.redirect('/home');
         }
-            // failed to login
-            req.flash('error', 'Wrong password');
-            return res.redirect('/auth/login');
+        // failed to login
+        req.flash('error', 'Wrong password');
+        return res.redirect('/auth/login');
     });
 };
 
@@ -104,7 +104,7 @@ const getLogout = (req, res) => {
     req.flash('error', 'your account logout successful');
     req.session.destroy((err) => {
         if (err) {
-            return res.redirect('/products');
+            return res.redirect('/');
         }
         res.clearCookie(process.env.SESS_NAME);
        return res.redirect('/auth/login');

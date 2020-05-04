@@ -1,7 +1,16 @@
 const express = require('express');
 const multer = require('multer');
 
-const upload = multer({ dest: 'public/uploads/' });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}.png`);
+    },
+  });
+
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -32,7 +41,11 @@ const {
     getupdatePost,
     updatePost,
     deletePost,
+    readOnePost,
+    readAllPostTag,
 } = require('../app/client/category/controller/category.controller');
+
+router.get('/home', notAuth, (req, res) => res.render('client/home'));
 
 router.route('/products')
     .get(notAuth, clientController.readAllProduct)
@@ -53,13 +66,15 @@ router.route('/product/:product_slug/update')
 router.get('/categories', notAuth, readAllCatogory);
 router.get('/categories/:category_slug', readCategory);
 
+router.get('/categories/post/:post_slug/show', readOnePost);
+
 router.route('/posts/add')
     .get(notAuth, getCreatePost)
-    .post(notAuth, createPost);
+    .post(notAuth, upload.array('file', 3), createPost);
 
 router.route('/posts/:post_slug/update')
     .get(notAuth, getupdatePost)
-    .put(notAuth, adminAuthCategory, updatePost);
+    .put(notAuth, adminAuthCategory, upload.array('file', 3), updatePost);
 
 router.delete('/posts/:post_slug/delete', notAuth, adminAuthCategory, deletePost);
 
@@ -71,6 +86,8 @@ router.route('/auth/register')
 router.route('/auth/login')
     .get(userAuth, getLogin)
     .post(userAuth, validateLogin(), postLogin);
+
+router.get('/categories/post/:tag_slug', readAllPostTag);
 
 // logout
 router.get('/auth/logout', notAuth, getLogout);

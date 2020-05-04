@@ -26,7 +26,11 @@
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea class="form-control" name="postContent" id="content" placeholder="Content's name..."></textarea>
+                    <textarea class="form-control" rows="20" name="postContent" id="content" placeholder="Content's name..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="input">Tags</label>
+                    <input class="form-control" type="text" name="tags" id="input-tags" required>
                 </div>
             </div>
             <div class="box-footer text-right">
@@ -35,6 +39,7 @@
         </form>
     </div>
     <%- include('../../admin/partials/js'); -%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
     <script>
         tinymce.init({
           selector: 'textarea',
@@ -43,13 +48,53 @@
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste code help wordcount'
             ],
-          toolbar: 'undo redo | formatselect | ' +
+          toolbar: 'image'+'undo redo | formatselect | ' +
             'bold italic backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | help' + 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
           toolbar_mode: 'floating',
           tinycomments_mode: 'embedded',
           tinycomments_author: 'Author name',
+          images_upload_handler: function (blobInfo, success, failure) {
+            var xhr, formData;
+
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.open('POST', 'add');
+
+            xhr.onload = function() {
+            var json;
+
+            if (xhr.status != 200) {
+                failure('HTTP Error: ' + xhr.status);
+                return;
+            }
+
+            json = JSON.parse(xhr.responseText);
+
+            if (!json || typeof json.location != 'string') {
+                failure('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+
+            success(json.location);
+            };
+
+            formData = new FormData();
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+            xhr.send(formData);
+        }
+        });
+        $('#input-tags').selectize({
+            delimiter: ',',
+            persist: false,
+            create: function(input) {
+                return {
+                    value: input,
+                    text: input
+                }
+            }
         });
     </script>
 </body>

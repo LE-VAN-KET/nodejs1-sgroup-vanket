@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Post</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../../css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-capitalize"><%= post[0].post_title %></h3>
+        <section>
+            <%- post[0].post_content %>
+        </section>
+        <div class="klw-new-tags">
+            <ul class="knt-list list-unstyled d-flex flex-wrap">
+                <% post.forEach((post) => { %>
+                    <li class="kli"><a href="/categories/post/<%= post.tag_slug %>" title="<%= post.tag_name %>">#<%= post.tag_name %> </a></li>
+                <% }) %>
+            </ul>
+        </div>
+        <!-- update post -->
+        <a type="button" class='btn btn-warning text-white align-center text-capitalize d-inline-block float-right' href='/posts/<%= post[0].post_slug %>/update'><i class="fa fa-pencil" aria-hidden="true"></i></a>
+        <button type="button" class="btn btn-primary text-capitalize float-right mr-3" data-toggle="modal" data-target="#staticBackdrop<%= post[0].post_id %>">
+            <i class="fa fa-trash-o text-white" aria-hidden="true"></i>
+        </button>
+        <!-- Update post -->
+        <div class="modal fade" id="staticBackdrop<%= post[0].post_id %>" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title text-capitalize" id="staticBackdropLabel"> Are you sure you want to delete post here?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <i class="fa fa-exclamation-triangle mx-auto text-danger p-0" aria-hidden="true"></i>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="/posts/<%= post[0].post_slug %>/delete?_method=DELETE" method="POST"> 
+                            <button type="submit"  class="btn btn-danger align-center text-capitalize">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

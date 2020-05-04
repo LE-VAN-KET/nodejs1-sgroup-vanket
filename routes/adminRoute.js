@@ -127,12 +127,12 @@ router.route('/posts')
     .get(notAuth, postController.readAllPosts);
 router.route('/post/add')
     .get(notAuth, postController.getCreatePost)
-    .post(notAuth, postController.createPost);
+    .post(notAuth, upload.array('file', 3), postController.createPost);
 
 router.delete('/posts/:post_slug/delete', notAuth, postController.deletePost);
 router.route('/posts/:post_slug/update')
     .get(notAuth, postController.getupdatePost)
-    .put(notAuth, postController.updatePost);
+    .put(notAuth, upload.array('file', 3), postController.updatePost);
 
 router.get('/posts/:post_slug/show', notAuth, postController.readOnePost);
 

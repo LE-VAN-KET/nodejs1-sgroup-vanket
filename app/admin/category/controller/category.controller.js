@@ -22,7 +22,9 @@ const createCategory = async (req, res) => {
     };
     await knex('categories').insert(newCategory)
     .catch((err) => {
-        return res.redirect('/admin/categories');
+        if (err) {
+            res.json(err);
+        }
     });
     return res.redirect('/admin/categories');
 };
